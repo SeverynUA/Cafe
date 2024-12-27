@@ -1,0 +1,192 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>brainacad.org</groupId>
+  <artifactId>Cafe</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>Cafe</name>
+  <url>http://maven.apache.org</url>
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <properties>
+
+        <db.url>jdbc:postgresql://localhost:5432/Cafe</db.url>
+        <db.username>postgres</db.username>
+        <db.password>1234567890</db.password>
+        <db.sql_file_path>${project.basedir}/src/main/resources/Database/Init-db_Cafe.sql</db.sql_file_path>
+
+        <env>development</env>
+        <test.message>Maven hello from dev</test.message>
+      </properties>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+    </profile>
+
+    <profile>
+      <id>test</id>
+      <properties>
+
+        <db.url>jdbc:postgresql://localhost:5432/Cafe_Test</db.url>
+        <db.username>postgres</db.username>
+        <db.password>1234567890</db.password>
+        <db.sql_file_path>src/main/resources/Database/Init-db_Cafe_Test.sql</db.sql_file_path>
+
+        <env>testing</env>
+        <test.message>Maven hello from test</test.message>
+      </properties>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+    </profile>
+
+    <profile>
+      <id>production</id>
+      <properties>
+        <db.url>jdbc:postgresql://prod-server:5432/Cafe</db.url>
+        <db.username>prod_user</db.username>
+        <db.password>prod_password</db.password>
+        <db.sql_file_path>\src\main\resources\Database\Init-db_Cafe.sql</db.sql_file_path>
+      </properties>
+    </profile>
+  </profiles>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+    <guava>33.3.1-jre</guava>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.6.0</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.10.0</version> <!-- Переконайтесь, що це остання стабільна версія -->
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Mockito для мокування -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.5.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- JUnit 5 Engine для запуску тестів -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.10.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>brainacad.org.App</mainClass>
+          <systemProperties>
+            <property>
+              <key>db.url</key>
+              <value>${db.url}</value>
+            </property>
+            <property>
+              <key>db.username</key>
+              <value>${db.username}</value>
+            </property>
+            <property>
+              <key>db.password</key>
+              <value>${db.password}</value>
+            </property>
+            <property>
+              <key>db.sql_file_path</key>
+              <value>${db.sql_file_path}</value>
+            </property>
+          </systemProperties>
+        </configuration>
+      </plugin>
+
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <resources>
+            <resource>
+              <directory>src/main/resources</directory>
+              <filtering>true</filtering>
+            </resource>
+            <resource>
+              <directory>src/main/resources/Database</directory>
+              <filtering>true</filtering>
+            </resource>
+          </resources>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>15</source>
+          <target>15</target>
+        </configuration>
+      </plugin>
+    </plugins>
+
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+
+      <resource>
+        <directory>src/main/resources/Database</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+  </build>
+</project>

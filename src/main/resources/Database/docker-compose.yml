@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17  # Використовуйте актуальну версію PostgreSQL
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres      # Ім'я користувача
+      POSTGRES_PASSWORD: 1234567890   # Пароль
+      POSTGRES_DB: Cafe    # Ім'я бази даних
+    ports:
+      - "5432:5432"  # Прив'язка порту
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Зберігання даних
+
+volumes:
+  postgres_data:
